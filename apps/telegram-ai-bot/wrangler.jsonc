@@ -1,0 +1,31 @@
+/**
+ * Cloudflare Worker config for the Telegram AI bot.
+ * Replace KV namespace ids and route/name per environment before deploying.
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "telegram-ai-bot-dev",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "CHAT_KV",
+			"id": "REPLACE_WITH_KV_NAMESPACE_ID"
+		}
+	],
+	"vars": {
+		"AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+		"SYSTEM_PROMPT": "You are a helpful, concise Telegram assistant. Reply in the user's language. Keep answers under 1500 characters unless the user asks for more.",
+		"HISTORY_TURNS": "8"
+	},
+	"dev": {
+		"port": 8977
+	}
+}
