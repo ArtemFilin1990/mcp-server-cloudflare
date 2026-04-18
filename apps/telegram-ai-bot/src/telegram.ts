@@ -3,13 +3,13 @@ import { clearHistory, loadHistory, saveHistory } from './history'
 import type { Env, TelegramMessage, TelegramUpdate } from './types'
 
 const HELP_TEXT =
-	'I am an AI assistant running on Cloudflare Workers.\n\n' +
-	'Commands:\n' +
-	'/start — greet and reset the conversation\n' +
-	'/reset — clear conversation history\n' +
-	'/model — show the model in use\n' +
-	'/help — show this message\n\n' +
-	Just send a message and I will reply.'
+	'Я — ИИ-ассистент, работающий на Cloudflare Workers.\n\n' +
+	'Команды:\n' +
+	'/start — поприветствовать и сбросить диалог\n' +
+	'/reset — очистить историю диалога\n' +
+	'/model — показать текущую модель\n' +
+	'/help — показать это сообщение\n\n' +
+	'Просто напишите сообщение, и я отвечу.'
 
 export async function handleTelegramUpdate(rawUpdate: unknown, env: Env): Promise<void> {
 	const update = rawUpdate as TelegramUpdate
@@ -35,7 +35,7 @@ async function handleCommand(message: TelegramMessage, text: string, env: Env): 
 			await sendMessage(
 				env,
 				chatId,
-				`Hi${message.from?.first_name ? `, ${message.from.first_name}` : ''}! ${HELP_TEXT}`,
+				`Привет${message.from?.first_name ? `, ${message.from.first_name}` : ''}! ${HELP_TEXT}`,
 				message.message_id,
 			)
 			return
@@ -44,13 +44,13 @@ async function handleCommand(message: TelegramMessage, text: string, env: Env): 
 			return
 		case '/reset':
 			await clearHistory(env, chatId)
-			await sendMessage(env, chatId, 'Conversation history cleared.', message.message_id)
+			await sendMessage(env, chatId, 'История диалога очищена.', message.message_id)
 			return
 		case '/model':
-			await sendMessage(env, chatId, `Current model: ${env.AI_MODEL}`, message.message_id)
+			await sendMessage(env, chatId, `Текущая модель: ${env.AI_MODEL}`, message.message_id)
 			return
 		default:
-			await sendMessage(env, chatId, `Unknown command: ${command}`, message.message_id)
+			await sendMessage(env, chatId, `Неизвестная команда: ${command}`, message.message_id)
 	}
 }
 
@@ -66,7 +66,7 @@ async function handleChat(message: TelegramMessage, text: string, env: Env): Pro
 		reply = await generateReply(env, history)
 	} catch (err) {
 		console.error('AI generation failed', err)
-		await sendMessage(env, chatId, 'Sorry, I could not generate a reply. Please try again.', message.message_id)
+		await sendMessage(env, chatId, 'Извините, не удалось сгенерировать ответ. Попробуйте ещё раз.', message.message_id)
 		return
 	}
 
